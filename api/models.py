@@ -7,7 +7,7 @@ from .db import Base
 
 
 class Result(Base):
-    __tablename__ = "results"
+    __tablename__ = 'results'
 
     id = Column(Integer, primary_key=True, index=True)
     result = Column(String)
