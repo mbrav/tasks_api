@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "signup_api"
+version = "0.1.0"
+description = "An asynchronous Fast API service for signups and Telegram integration"
+authors = ["mbrav <mbrav@protonmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.73.0"
+uvicorn = "^0.17.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0.1"
+flake8 = "^4.0.1"
+autopep8 = "^1.6.0"
+
+[tool.pytest.ini_options]
+minversion = "6.2"
+testpaths = [
+    "tests/",
+]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",
+]
+addopts = "-vv -p no:cacheprovider"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
