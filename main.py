@@ -1,11 +1,21 @@
 import uvicorn
 
-from api import db, models
+import config
+from api import db, middleware, models
 from api.routers import router
-from config import app
 
-app.include_router(router)
+# from api.services import TGbot
+
 models.Base.metadata.create_all(db.engine)
 
+app = config.app
+app.include_router(router)
+app.add_middleware(middleware.ProcessTimeMiddleware)
+app.add_middleware(middleware.LoggerMiddleware)
+
+
+# bot = TGbot(token=config.TELEGRAM_TOKEN)
+# bot.run()
+
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+    uvicorn.run(app, host='0.0.0.0', port=8000, debug=True)
