@@ -11,7 +11,6 @@ models.Base.metadata.create_all(db.engine)
 app = config.app
 app.include_router(router)
 app.add_middleware(middleware.ProcessTimeMiddleware)
-app.add_middleware(middleware.LoggerMiddleware)
 
 
 # bot = TGbot(token=config.TELEGRAM_TOKEN)

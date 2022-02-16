@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessTimeMiddleware(BaseHTTPMiddleware):
-    """Add request process time to response headers"""
+    """Add request process time to response headers wiht logger"""
 
     async def dispatch(self, request, call_next):
         start_time = time.time()
@@ -18,21 +18,15 @@ class ProcessTimeMiddleware(BaseHTTPMiddleware):
 
         process_time = '{0:.5f}'.format(time.time() - start_time)
         response.headers['X-Process-Time'] = str(process_time)
-        print(f'Process Time: {process_time}ms')
-        return response
 
+        log_message = f'Request "{request.url.path}" ' \
+            f'{response.status_code} time {process_time}s '
 
-class LoggerMiddleware(BaseHTTPMiddleware):
-    """Add request logging to response headers"""
-
-    async def dispatch(self, request, call_next):
-        logger.info(f'Request: {request.url.path}')
-        start_time = time.time()
-
-        response = await call_next(request)
-
-        process_time = '{0:.5f}'.format(time.time() - start_time)
-        logger.info(
-            f'Process Time: {process_time}s status_code={response.status_code}')
+        if response.status_code < 203:
+            logger.info(log_message)
+        elif response.status_code < 500:
+            logger.warning(log_message)
+        else:
+            logger.error(log_message)
 
         return response

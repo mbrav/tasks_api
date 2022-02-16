@@ -1,4 +1,3 @@
-
 import logging
 import os
 from pathlib import Path
@@ -10,7 +9,8 @@ env_path = Path('.env')
 load_dotenv(dotenv_path=env_path)
 
 
-PRODUCTION = os.getenv('PRODUCTION', False)
+PRODUCTION = bool(os.getenv('PRODUCTION', False))
+DEBUG = bool(os.getenv('DEBUG', True))
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', None)
 
@@ -25,13 +25,24 @@ if PRODUCTION:
 else:
     DATABASE_URL = 'sqlite:///./api.db'
 
-logging.basicConfig(
-    filename='app.log',
-    level=logging.INFO,
-    # datefmt='%d-%b-%y %H:%M:%S',
-    format='%(levelname)s:%(name)s %(asctime)s: %(message)s')
+logger_level = logging.INFO
+if DEBUG:
+    logger_level = logging.DEBUG
 
-logger = logging.getLogger(__name__)
+formatter = logging.Formatter(
+    '%(levelname)s:%(name)s %(asctime)s: %(message)s')
+handler = logging.handlers.RotatingFileHandler('logs/app.log',
+                                               delay=0,
+                                               maxBytes=1024*1024*2,
+                                               backupCount=5)
+handler.setFormatter(formatter)
+
+logger = logging.getLogger()
+logger.setLevel(logger_level)
+logger.addHandler(handler)
+
+# logging.getLogger('sqlalchemy.engine').setLevel(logger_level)
+logging.getLogger('sqlalchemy.pool').setLevel(logger_level)
 
 app = FastAPI(
     title='API service for signups and Telegram integration',

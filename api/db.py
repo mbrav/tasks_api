@@ -7,7 +7,10 @@ SQLALCHEMY_DATABASE_URL = config.DATABASE_URL
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
-    pool_pre_ping=True)
+    pool_pre_ping=True,
+    echo_pool=True,
+    pool_size=20,
+    max_overflow=20)
 
 SessionLocal = sessionmaker(
     autocommit=False,
