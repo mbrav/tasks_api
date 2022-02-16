@@ -40,4 +40,10 @@ Run server:
 $ python -m uvicorn main:app --host 0.0.0.0 --port 8000 --workers 1 --reload
 ```
 
+Advanced config:
+
+```bash
+$ python -m uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2 --ssl-keyfile ~/ssl/keys/server.key --ssl-certfile ~/ssl/certs/server.crt
+```
+
 Go to [0.0.0.0:8000/docs](http://0.0.0.0:8000/docs) for SwaggerUI
