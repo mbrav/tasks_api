@@ -26,7 +26,7 @@ class LoggerMiddleware(BaseHTTPMiddleware):
     """Add request logging to response headers"""
 
     async def dispatch(self, request, call_next):
-        logger.info(f'Start request path={request.url.path}')
+        logger.info(f'Request: {request.url.path}')
         start_time = time.time()
 
         response = await call_next(request)

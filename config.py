@@ -27,7 +27,9 @@ else:
 
 logging.basicConfig(
     filename='app.log',
-    level=logging.INFO)
+    level=logging.INFO,
+    # datefmt='%d-%b-%y %H:%M:%S',
+    format='%(levelname)s:%(name)s %(asctime)s: %(message)s')
 
 logger = logging.getLogger(__name__)
 
