@@ -149,3 +149,4 @@ poetry.lock
 entrypoint.sh
 data/
 logs/
+*/node_modules/

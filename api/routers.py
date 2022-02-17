@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi_pagination import LimitOffsetPage, add_pagination
+from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -44,7 +46,7 @@ async def signup_post(schema: schemas.SignupIn, db: Session = Depends(get_databa
     return await create()
 
 
-@router.get('/signup/{id}', status_code=200, tags=['signups'])
+@router.get('/signup/{id}', tags=['signups'])
 async def signup_get(id: int, response: Response, db: Session = Depends(get_database)):
     """Retrieve signups object with GET request"""
 
@@ -56,8 +58,12 @@ async def signup_get(id: int, response: Response, db: Session = Depends(get_data
     return result
 
 
-@router.get('/signups', status_code=200, tags=['signups'])
+@router.get(
+    '/signups',
+    response_model=LimitOffsetPage[schemas.SignupOut],
+    tags=['signups'])
 async def signups_list(db: Session = Depends(get_database)):
     """List signups with GET request"""
+    return paginate(db.query(models.Signup))
 
-    return db.query(models.Signup).all()
+add_pagination(router)

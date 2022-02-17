@@ -1,6 +1,15 @@
+from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+class Status(BaseModel):
+    message: str
 
 
 class SignupIn(BaseModel):
@@ -8,12 +17,12 @@ class SignupIn(BaseModel):
     last_name: str
     phone: str
     email: str
-    class_id: str
+    class_id: Optional[str] = None
+
+    class Config:
+        orm_mode = True
 
 
 class SignupOut(SignupIn):
-    date_created: str
-
-
-class SignupOut(BaseModel):
-    data: List[SignupIn]
+    created_at: datetime
+    user_id: Optional[int] = None
