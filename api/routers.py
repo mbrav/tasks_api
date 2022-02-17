@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from . import models, schemas
-from .db import get_db
+from .db import get_database
 
 router = APIRouter()
 
@@ -32,7 +32,7 @@ async def index(message: str = None):
 
 
 @router.post('/signup', status_code=201, tags=['signups'])
-async def signup_post(schema: schemas.Signup, db: Session = Depends(get_db)):
+async def signup_post(schema: schemas.SignupIn, db: Session = Depends(get_database)):
     """Generate new signup with POST request"""
 
     async def create():
@@ -47,12 +47,20 @@ async def signup_post(schema: schemas.Signup, db: Session = Depends(get_db)):
 
 
 @router.get('/signup/{id}', status_code=200, tags=['signups'])
-async def signup_get(id: int, response: Response, db: Session = Depends(get_db)):
-    """Retrieve result object with GET request"""
+async def signup_get(id: int, response: Response, db: Session = Depends(get_database)):
+    """Retrieve signups object with GET request"""
 
     result = db.query(models.Signup).filter(models.Signup.id == id).first()
     if not result:
         detail = f'Signup with id {id} was not found'
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=detail)
+    return result
+
+
+@router.get('/signups', status_code=200, tags=['signups'])
+async def signups_list(db: Session = Depends(get_database)):
+    """List signups with GET request"""
+
+    result = db.query(models.Signup).all()
     return result
