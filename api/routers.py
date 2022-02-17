@@ -6,6 +6,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
 
 from . import models, schemas
+from .auth import oauth2_scheme
 from .db import get_database
 
 router = APIRouter()
@@ -47,7 +48,11 @@ async def signup_post(schema: schemas.SignupIn, db: Session = Depends(get_databa
 
 
 @router.get('/signup/{id}', tags=['signups'])
-async def signup_get(id: int, response: Response, db: Session = Depends(get_database)):
+async def signup_get(
+        id: int,
+        response: Response,
+        db: Session = Depends(get_database),
+        token: str = Depends(oauth2_scheme), tags=['signups']):
     """Retrieve signups object with GET request"""
 
     result = db.query(models.Signup).filter(models.Signup.id == id).first()
@@ -62,7 +67,7 @@ async def signup_get(id: int, response: Response, db: Session = Depends(get_data
     '/signups',
     response_model=LimitOffsetPage[schemas.SignupOut],
     tags=['signups'])
-async def signups_list(db: Session = Depends(get_database)):
+async def signups_list(db: Session = Depends(get_database), token: str = Depends(oauth2_scheme)):
     """List signups with GET request"""
     return paginate(db.query(models.Signup))
 
