@@ -9,8 +9,8 @@ env_path = Path('.env')
 load_dotenv(dotenv_path=env_path)
 
 
-PRODUCTION = bool(os.getenv('PRODUCTION', False))
-DEBUG = bool(os.getenv('DEBUG', True))
+PRODUCTION = os.getenv('PRODUCTION')
+DEBUG = os.getenv('DEBUG')
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', None)
 
