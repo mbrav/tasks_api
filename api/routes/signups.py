@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi_pagination import LimitOffsetPage, add_pagination
+from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy.orm import Session
 
-from . import models, schemas
-from .db import get_database
+from . import auth, get_database, models, schemas
 
 router = APIRouter()
 
@@ -31,7 +32,11 @@ async def index(message: str = None):
     return response
 
 
-@router.post('/signup', status_code=201, tags=['signups'])
+@router.post(
+    '/signup',
+    response_model=schemas.SignupOut,
+    status_code=201,
+    tags=['signups'])
 async def signup_post(schema: schemas.SignupIn, db: Session = Depends(get_database)):
     """Generate new signup with POST request"""
 
@@ -41,13 +46,14 @@ async def signup_post(schema: schemas.SignupIn, db: Session = Depends(get_databa
         db.commit()
         db.refresh(new_object)
         return new_object
-
-    response = await create()
-    return response
+    return await create()
 
 
-@router.get('/signup/{id}', status_code=200, tags=['signups'])
-async def signup_get(id: int, response: Response, db: Session = Depends(get_database)):
+@router.get('/signup/{id}', response_model=schemas.SignupOut, tags=['signups'])
+async def signup_get(
+        id: int,
+        db: Session = Depends(get_database),
+        token: str = Depends(auth.oauth2_scheme)):
     """Retrieve signups object with GET request"""
 
     result = db.query(models.Signup).filter(models.Signup.id == id).first()
@@ -58,9 +64,14 @@ async def signup_get(id: int, response: Response, db: Session = Depends(get_data
     return result
 
 
-@router.get('/signups', status_code=200, tags=['signups'])
-async def signups_list(db: Session = Depends(get_database)):
+@router.get(
+    '/signups',
+    response_model=LimitOffsetPage[schemas.SignupOut],
+    tags=['signups'])
+async def signups_list(
+        db: Session = Depends(get_database),
+        token: str = Depends(auth.oauth2_scheme)):
     """List signups with GET request"""
+    return paginate(db.query(models.Signup))
 
-    result = db.query(models.Signup).all()
-    return result
+add_pagination(router)

@@ -1,1 +1,3 @@
-from .bot import TGbot
+from . import auth
+
+# from .bot import TGbot

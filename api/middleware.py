@@ -1,8 +1,6 @@
 import logging
-import random
 import time
 
-from fastapi import Request, middleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)

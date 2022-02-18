@@ -1,4 +1,5 @@
 import config
+from fastapi.exceptions import HTTPException
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -6,15 +7,15 @@ from sqlalchemy.orm import sessionmaker
 SQLALCHEMY_DATABASE_URL = config.DATABASE_URL
 engine = None
 
-if config.PRODUCTION:
+if config.TESTING:
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+else:
     engine = create_engine(
         SQLALCHEMY_DATABASE_URL,
         pool_pre_ping=True,
         echo_pool=True,
         pool_size=20,
         max_overflow=20)
-else:
-    engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 
 Session = sessionmaker(
