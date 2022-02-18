@@ -1,7 +1,7 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.sql import func
 
-from . import Base
+from ..db import Base
 from .users import User
 
 
@@ -21,3 +21,9 @@ class Signup(Base):
     email = Column(String(30), nullable=False)
     class_id = Column(String(60), nullable=True)
     created_at = Column(DateTime, default=func.now())
+
+    def __init__(self, first_name, last_name, phone, email):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.phone = phone
+        self.email = email

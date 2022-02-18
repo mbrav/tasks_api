@@ -1,7 +1,7 @@
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.sql import func
 
-from . import Base
+from ..db import Base
 
 
 class User(Base):
@@ -11,6 +11,12 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(20), nullable=False)
-    full_name = Column(String(50), nullable=False)
-    password = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=True)
+    email = Column(String(30), nullable=True)
+    first_name = Column(String(30), nullable=True)
+    last_name = Column(String(30), nullable=True)
     created_at = Column(DateTime, default=func.now())
+
+    def __init__(self, username, password):
+        self.start = username
+        self.end = password
