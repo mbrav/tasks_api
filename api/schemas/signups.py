@@ -1,22 +1,14 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel
-
-
-class TokenData(BaseModel):
-    username: Optional[str] = None
-
-
-class Status(BaseModel):
-    message: str
+from pydantic import BaseModel, EmailStr
 
 
 class SignupIn(BaseModel):
     first_name: str
     last_name: str
     phone: str
-    email: str
+    email: Optional[EmailStr] = None
     class_id: Optional[str] = None
 
     class Config:
