@@ -12,7 +12,9 @@ fastapi-pagination = {extras = ["sqlalchemy"], version = "*"}
 uvicorn = "*"
 SQLAlchemy = "*"
 PyMySQL = "*"
-aiogram = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["argon2"], version = "*"}
+python-multipart = "^0.0.5"
 
 
 [tool.poetry.dev-dependencies]

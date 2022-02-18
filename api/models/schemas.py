@@ -26,3 +26,4 @@ class SignupIn(BaseModel):
 class SignupOut(SignupIn):
     created_at: datetime
     user_id: Optional[int] = None
+    id: int

@@ -1,8 +1,6 @@
-import uvicorn
-
 import config
 from api import db, middleware, models
-from api.routers import router
+from api.routes import router
 
 # from api.services import TGbot
 
@@ -17,6 +15,7 @@ app.add_middleware(middleware.ProcessTimeMiddleware)
 # bot.run()
 
 if __name__ == '__main__':
+    import uvicorn
     uvicorn.run(
         app,
         host='0.0.0.0',
