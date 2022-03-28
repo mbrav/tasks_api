@@ -16,12 +16,26 @@ logger = logging.getLogger(__name__)
 #     cal_id=settings.CAL_ID,
 # )
 
+with open('../README.md') as f:
+    description = f.read()
+
 app = FastAPI(
     title='API service for signups and Telegram integration',
+    description=description,
+    contact={
+        'name': 'mbrav',
+        'url': 'https://github.com/mbrav',
+        'email': 'mbrav@protonmail.com',
+    },
+    license_info={
+        'name': 'GNU 3.0',
+        'url': 'https://www.gnu.org/licenses/gpl-3.0.en.html',
+    },
     docs_url='/docs',
-    version='0.1.4',
+    version=settings.VERSION,
     redoc_url='/redocs',
 )
+
 
 app.include_router(api.api_router, prefix=settings.API_V1_STR)
 # app.include_router(tg_router, prefix=settings.WEBHOOK_PATH,

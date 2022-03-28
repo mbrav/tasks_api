@@ -1,7 +1,7 @@
 import logging
 from typing import List, Optional
 
-from pydantic import AmqpDsn, AnyHttpUrl, BaseSettings, Field
+from pydantic import AnyHttpUrl, BaseSettings, Field, PostgresDsn
 
 
 class SettingsBase(BaseSettings):
@@ -16,6 +16,7 @@ class SettingsBase(BaseSettings):
     TESTING: bool = Field(env='TESTING', default=True)
     DEBUG: bool = Field(env='DEBUG', default=False)
     LOGGING: bool = Field(env='LOGGING', default=False)
+    VERSION: str = Field('0.1.4')
 
     SECRET_KEY: str = Field(env='SECRET_KEY', default='pl3seCh@nGeM3!')
     API_V1_STR: str = Field(env='API_V1_STR', default='/api')
@@ -56,18 +57,21 @@ class MySQLMixin(DBSettings):
 class PostgresMixin(DBSettings):
     """"Postgres Settings Mixin"""
 
-    PG_USER: Optional[str] = Field(env='PG_USER')
-    PG_PASSWORD: Optional[str] = Field(env='PG_PASSWORD')
-    PG_HOST: Optional[str] = Field(env='PG_HOST')
-    PG_PORT: Optional[int] = Field(env='PG_PORT', default=5432)
-    PG_DB: Optional[str] = Field(env='PG_DB')
+    POSTGRES_USER: Optional[str] = Field(
+        env='POSTGRES_USER', default='postgres')
+    POSTGRES_PASSWORD: Optional[str] = Field(
+        env='POSTGRES_PASSWORD', default='postgres')
+    POSTGRES_SERVER: Optional[str] = Field(
+        env='POSTGRES_SERVER', default='db')
+    POSTGRES_PORT: Optional[int] = Field(env='POSTGRES_PORT', default=5432)
+    POSTGRES_DB: Optional[str] = Field(env='POSTGRES_DB', default='postgres')
 
     @property
-    def DATABASE_URL(self) -> str:
+    def DATABASE_URL(self) -> PostgresDsn:
         url = f'postgresql+asyncpg://' \
-            f'{self.PG_USER}:' \
-            f'{self.PG_PASSWORD}@{self.PG_HOST}:' \
-            f'{self.PG_PORT}/{self.PG_DB}'
+            f'{self.POSTGRES_USER}:' \
+            f'{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:' \
+            f'{self.POSTGRES_PORT}/{self.POSTGRES_DB}'
         return url
 
 
