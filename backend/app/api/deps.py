@@ -20,7 +20,11 @@ SortByQuery = Query(
 SortByDescQuery = Query(
     True,
     title='Sort descending',
-    description='Sort descending, default is True',
+)
+
+FilterQuery = Query(
+    None,
+    title='Filter by column'
 )
 
 

@@ -13,10 +13,11 @@ class SettingsBase(BaseSettings):
 
     """
 
+    VERSION: str = Field('0.1.4')
+
     TESTING: bool = Field(env='TESTING', default=True)
     DEBUG: bool = Field(env='DEBUG', default=False)
     LOGGING: bool = Field(env='LOGGING', default=False)
-    VERSION: str = Field('0.1.4')
 
     SECRET_KEY: str = Field(env='SECRET_KEY', default='pl3seCh@nGeM3!')
     API_V1_STR: str = Field(env='API_V1_STR', default='/api')
@@ -75,13 +76,6 @@ class PostgresMixin(DBSettings):
         return url
 
 
-class SQLiteMixin(DBSettings):
-    """"SQLite Settings Mixin"""
-
-    SQLITE_DATABASE_FILE: str = 'sqlite+aiosqlite:///./api.db'
-    SQLITE_DATABASE_MEMORY: str = 'sqlite+aiosqlite:///:memory:'
-
-
 class AuthServiceMixin(SettingsBase):
     """Auth Service Settings Mixin"""
 
@@ -112,7 +106,6 @@ class ExternalServiceMixin(SettingsBase):
 
 class Settings(
         PostgresMixin,
-        SQLiteMixin,
         AuthServiceMixin,
         ExternalServiceMixin
 ):
@@ -140,5 +133,5 @@ if settings.LOGGING:
     logger.setLevel(logger_level)
     logger.addHandler(handler)
 
-    # logging.getLogger('sqlalchemy.engine').setLevel(logger_level)
+    logging.getLogger('sqlalchemy.engine').setLevel(logger_level)
     logging.getLogger('sqlalchemy.pool').setLevel(logger_level)

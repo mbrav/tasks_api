@@ -1,5 +1,3 @@
-from typing import AsyncGenerator
-
 from fastapi import HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -24,7 +22,7 @@ Session = sessionmaker(
 
 
 # Dependency
-async def get_database() -> AsyncGenerator:
+async def get_database() -> AsyncSession:
     async with Session() as session:
         try:
             yield session
