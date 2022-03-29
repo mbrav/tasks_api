@@ -1,4 +1,5 @@
 import logging
+import os
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
@@ -16,7 +17,9 @@ logger = logging.getLogger(__name__)
 #     cal_id=settings.CAL_ID,
 # )
 
-with open('../README.md') as f:
+FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_DIR = os.path.dirname(FILE_DIR)
+with open(f'{REPO_DIR}/README.md') as f:
     description = f.read()
 
 app = FastAPI(
