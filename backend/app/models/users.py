@@ -15,7 +15,7 @@ class User(BaseModel):
     is_active = Column(Boolean(), default=True)
     is_admin = Column(Boolean(), default=False)
 
-    # signups = relationship('User', back_populates='owner')
+    # tasks = relationship('User', back_populates='owner')
 
     def __init__(self,
                  username: str,

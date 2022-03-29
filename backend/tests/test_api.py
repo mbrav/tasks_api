@@ -15,20 +15,20 @@ class TestApi:
         assert 'response' in response.json()
 
     @pytest.mark.asyncio
-    async def test_create_signup(
+    async def test_create_task(
         self,
         db_session: Session,
         async_client: AsyncClient,
-        new_signup: dict
+        new_task: dict
     ) -> None:
 
         response = await async_client.post(
-            f'{settings.API_V1_STR}/signups', json=new_signup)
+            f'{settings.API_V1_STR}/tasks', json=new_task)
 
-        # created_signup = await models.Signup.get(
-        #     db_session, last_name=new_signup['last_name'], raise_404=False)
+        # created_task = await models.Task.get(
+        #     db_session, last_name=new_task['last_name'], raise_404=False)
 
         assert response.status_code == 201
         # assert response.status_code == response
-        # assert created_signup
-        # assert new_signup.items() <= created_signup.items()
+        # assert created_task
+        # assert new_task.items() <= created_task.items()

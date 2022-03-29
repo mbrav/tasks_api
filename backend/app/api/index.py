@@ -12,7 +12,7 @@ async def health_check(request: Request, message: str = None):
 
     response = {
         'status': 'OK',
-        'response': 'Fast API service for signups and Telegram integration',
+        'response': 'Fast API service for tasks',
         'version': settings.VERSION,
         'client': request.client.host,
         'time': datetime.utcnow().isoformat()

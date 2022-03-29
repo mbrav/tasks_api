@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel
 
 
-class Signup(BaseModel):
-    """Signup class"""
+class Task(BaseModel):
+    """Task class"""
 
     first_name = Column(String(30), nullable=False)
     last_name = Column(String(30), nullable=False)
@@ -14,7 +14,7 @@ class Signup(BaseModel):
 
     class_id = Column(String(60), nullable=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
-    # user = relationship('User', back_populates='signup')
+    # user = relationship('User', back_populates='task')
 
     def __init__(self,
                  first_name: str,

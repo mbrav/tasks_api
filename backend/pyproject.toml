@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "signup_api"
+name = "tasks_api"
 version = "0.1.4"
-description = "An asynchronous Fast API service for signups and Telegram integration"
+description = "An asynchronous Fast API service for tasks"
 authors = ["mbrav <mbrav@protonmail.com>"]
 
 [tool.poetry.dependencies]

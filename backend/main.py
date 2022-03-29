@@ -6,16 +6,11 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app import api, db, middleware, models
 from app.config import settings
-# from app.services import GoogleCal, tg_router
 from app.utils import create_superuser
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# google_cal = GoogleCal(
-#     api_key=settings.CAL_API_KEY,
-#     cal_id=settings.CAL_ID,
-# )
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_DIR = os.path.dirname(FILE_DIR)
@@ -23,7 +18,7 @@ with open(f'{REPO_DIR}/README.md') as f:
     description = f.read()
 
 app = FastAPI(
-    title='API service for signups and Telegram integration',
+    title='API service for tasks',
     description=description,
     contact={
         'name': 'mbrav',
@@ -41,8 +36,6 @@ app = FastAPI(
 
 
 app.include_router(api.api_router, prefix=settings.API_V1_STR)
-# app.include_router(tg_router, prefix=settings.WEBHOOK_PATH,
-#                    tags=['Telegram Bot'])
 
 app.add_middleware(middleware.ProcessTimeMiddleware)
 # app.add_middleware(middleware.ClientLookupMiddleware)

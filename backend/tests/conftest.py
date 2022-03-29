@@ -54,7 +54,7 @@ async def new_login(scope='function') -> dict:
 
 
 @pytest.fixture
-async def new_signup(scope='function') -> dict:
+async def new_task(scope='function') -> dict:
     data = {
         'first_name': utils.random_lower_string(10).capitalize(),
         'last_name': utils.random_lower_string(12).capitalize(),

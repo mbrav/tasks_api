@@ -31,16 +31,16 @@ class TestLocust(HttpUser):
         self.client.get('/api/')
 
     @task
-    def generate_signup(self):
-        new_signup = {
+    def generate_task(self):
+        new_task = {
             'first_name': random_lower_string(10).capitalize(),
             'last_name': random_lower_string(12).capitalize(),
             'phone': random_phone(),
             'email': random_email(),
             'class_id': random_id_string(20),
         }
-        self.client.post('/api/signups', json=new_signup)
+        self.client.post('/api/tasks', json=new_task)
 
     @task
-    def retrieve_signup(self):
-        self.client.get('/api/signups/1')
+    def retrieve_task(self):
+        self.client.get('/api/tasks/1')
