@@ -38,7 +38,7 @@ services:
         ports:
             - 80:80
         volumes:
-            - ./nginx/signup-api.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx/fast-api.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - backend
         networks:

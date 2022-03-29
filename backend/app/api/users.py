@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends, status
 from fastapi_pagination import LimitOffsetPage, add_pagination
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .deps import (SortByDescQuery, SortByQuery, get_active_superuser,
-                   get_active_user)
+from .deps import (FilterQuery, SortByDescQuery, SortByQuery,
+                   get_active_superuser, get_active_user)
 
 router = APIRouter()
 
@@ -73,10 +73,18 @@ async def users_list(
     user: models.User = Depends(get_active_superuser),
     db_session: AsyncSession = Depends(db.get_database),
     sort_by: Optional[str] = SortByQuery,
-    desc: Optional[bool] = SortByDescQuery
+    desc: Optional[bool] = SortByDescQuery,
+    is_active: Optional[bool] = FilterQuery,
+    is_admin: Optional[bool] = FilterQuery,
 ):
     """List users with GET request"""
 
-    return await models.User.paginate(db_session, desc=desc, sort_by=sort_by)
+    return await models.User.paginate(
+        db_session,
+        desc=desc,
+        sort_by=sort_by,
+        is_active=is_active,
+        is_admin=is_admin,
+    )
 
 add_pagination(router)

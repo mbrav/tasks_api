@@ -118,7 +118,7 @@ class BaseModel(Base):
         db_query: select = None,
         sort_by: str = None,
         desc: bool = True,
-        **kwarg
+        **kwargs
     ) -> paginate:
         """Get paginated list of objects
 
@@ -135,6 +135,8 @@ class BaseModel(Base):
             paginate: fastapi_pagination result
         """
 
+        filter_by = {k: v for k, v in kwargs.items() if v is not None}
+
         if not sort_by:
             sort_by = inspect(self).primary_key[0].name
         if not db_query:
@@ -142,7 +144,11 @@ class BaseModel(Base):
             sort = 'desc'
             if not desc:
                 sort = 'asc'
-            db_query = select(self).order_by(text(f'{column} {sort}'))
+            if len(filter_by):
+                db_query = select(self).order_by(
+                    text(f'{column} {sort}')).filter_by(**filter_by)
+            else:
+                db_query = select(self).order_by(text(f'{column} {sort}'))
 
         try:
             return await paginate(db_session, db_query)
