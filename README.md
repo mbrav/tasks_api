@@ -2,7 +2,7 @@
 
 ## FastAPI tasks_api
 
-An asynchronous Fast API service for tasks.
+An 100% asynchronous Fast API service for tasks.
 
 ### Client-server application.
 
@@ -43,7 +43,7 @@ Should be able to:
 The project uses [FastAPI](https://fastapi.tiangolo.com/) as a base framework with the following stack:
 
 -   Integration with [SQLAlchemy's](https://www.sqlalchemy.org/) new ORM statement paradigm to be implemented in [v2.0](https://docs.sqlalchemy.org/en/20/changelog/migration_20.html);
--   Asynchronous PostgreSQL databse via [asyncpg](https://github.com/MagicStack/asyncpg), one of the fastest and high performant Database Client Libraries for python/asyncio;
+-   Asynchronous PostgreSQL database via [asyncpg](https://github.com/MagicStack/asyncpg), one of the fastest and high performant Database Client Libraries for python/asyncio;
 -   A token authorization system using the [argon2 password hashing algorithm](https://github.com/P-H-C/phc-winner-argon2), the password-hashing function that won the [Password Hashing Competition (PHC)](https://www.password-hashing.net/);
 -   Asynchronous pytests using [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) and [httpx](https://www.python-httpx.org/) libraries instead of the synchronous requests library;
 
@@ -52,7 +52,7 @@ The project uses [FastAPI](https://fastapi.tiangolo.com/) as a base framework wi
 Copy .env file:
 
 ```bash
-$ cp backend/.env.example backend/.env
+cp backend/.env.example backend/.env
 ```
 
 With docker-compose installed, do:

@@ -6,41 +6,24 @@ authors = ["mbrav <mbrav@protonmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = "*"
-fastapi-pagination = {extras = ["sqlalchemy"], version = "*"}
-pydantic = {extras = ["email", "dotenv"], version = "*"}
-uvicorn = {extras = ["standard"], version = "*"}
-SQLAlchemy = "*"
-asyncpg = "*"
-python-jose = {extras = ["cryptography"], version = "*"}
-passlib = {extras = ["argon2"], version = "*"}
-python-multipart = "*"
-httpx = {extras = ["http2"], version = "*"}
-aiogram = "*"
+fastapi = "^0.75.0"
+fastapi-pagination = {extras = ["sqlalchemy"], version = "^0.9.1"}
+pydantic = {extras = ["email", "dotenv"], version = "^1.9.0"}
+uvicorn = {extras = ["standard"], version = "^0.17.6"}
+SQLAlchemy = "^1.4.32"
+asyncpg = "^0.25.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["argon2"], version = "^1.7.4"}
+python-multipart = "^0.0.5"
+httpx = {extras = ["http2"], version = "^0.22.0"}
+APScheduler = "^3.9.1"
+transliterate = "^1.10.2"
 
 
 [tool.poetry.dev-dependencies]
-pytest = "*"
-pytest-env = "*"
-pytest-asyncio = "*"
 flake8 = "*"
 autopep8 = "*"
 
-[tool.pytest.ini_options]
-minversion = "6.2"
-testpaths = [
-    "tests/",
-]
-filterwarnings = [
-    "error",
-    "ignore::DeprecationWarning",
-]
-addopts = "-vv -p no:cacheprovider"
-asyncio_mode = "auto"
-env = [
-    "TESTING=True",
-    "LOGGING=False"
-]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
