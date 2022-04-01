@@ -19,12 +19,13 @@ class TaskStatus(str, Enum):
     queued = 'queued'
     processing = 'processing'
     completed = 'completed'
+    error = 'error'
 
 
 class TaskIn(BaseModel):
 
     name: str = Field(
-        example='reverse',
+        example='combine',
         description='Valid function name')
     qwargs: Optional[dict] = Field(
         example=example_qwargs,

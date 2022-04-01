@@ -46,19 +46,14 @@ class Task(BaseModel):
     async def _update_modified(self):
         """Update time of object when modified"""
         self.updated_at = datetime.now()
-        if not self.result:
+        processing = self.status in (
+            TaskStatus.processing, TaskStatus.queued)
+        if not self.result and not processing:
             if self.planned_for < datetime.now():
                 self.status = TaskStatus.expired
                 self.completed_at = None
             elif self.status != TaskStatus.rescheduled:
                 self.status = TaskStatus.created
-
-    async def add_result(self, result_text: str):
-        """Update model with result"""
-        await self._update_modified()
-        self.completed_at = datetime.now()
-        self.result = result_text
-        self.status = TaskStatus.completed
 
     async def update_planned_for(self, seconds: int):
         """Update planned for time when delay is modified"""
@@ -67,15 +62,35 @@ class Task(BaseModel):
         self.planned_for = self.created_at + timedelta(seconds=seconds)
         await self._update_modified()
 
+    async def abort(self):
+        """Abort task"""
+        self.status = TaskStatus.aborted
+        await self._update_modified()
+
+    async def update_process_status(self, db_session: AsyncSession):
+        """Update model with processing status"""
+        self.status = TaskStatus.processing
+        await self._update_modified()
+        await self.update(db_session, **self.__dict__)
+
+    async def add_result(self, db_session: AsyncSession, result: str):
+        """Update model with result"""
+        self.completed_at = datetime.now()
+        self.result = result
+        self.status = TaskStatus.completed
+        await self._update_modified()
+        await self.update(db_session, **self.__dict__)
+
     @classmethod
     async def get_executable_tasks(self, db_session: AsyncSession):
         """Get available tasks for execution"""
         db_query = select(self).where(and_(
             or_(self.status == TaskStatus.created,
                 self.status == TaskStatus.rescheduled),
-            self.planned_for > datetime.now(),
+            self.planned_for < datetime.now()
         )).order_by(
             self.created_at.asc())
+
         tasks = await self.get_list(db_session, db_query=db_query)
         return tasks
 

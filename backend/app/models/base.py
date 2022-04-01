@@ -54,13 +54,9 @@ class BaseModel(Base):
             await db_session.refresh(self)
             return self
         except IntegrityError as ex:
-            if ex.orig:
-                ex = ex.orig
-                if ex.args:
-                    ex = ex.args
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=repr(ex))
+                detail=repr(ex.orig))
         except SQLAlchemyError as ex:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

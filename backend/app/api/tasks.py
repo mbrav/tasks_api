@@ -12,7 +12,7 @@ from .deps import (FilterQuery, SortByDescQuery, SortByQuery,
 router = APIRouter()
 
 
-async def check_method(name: str):
+async def check_method(name: str, kwargs: dict):
     """Check if method is available"""
 
     if name not in tasks_info.keys():
@@ -20,6 +20,14 @@ async def check_method(name: str):
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail={'error': f'Function {name} is not available.',
                     'methods': tasks_info})
+
+    arguments = tasks_info[name]['arguments']
+    if len(kwargs) != len(arguments):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={'error': f'Incorrect number of arguments passed for {name}. '
+                    f'Passed: {len(kwargs)}, required: {len(arguments)}',
+                    'arguments': arguments})
 
 
 @router.get(
@@ -69,9 +77,26 @@ async def task_post(
 ) -> models.Task:
     """Create new task with POST request"""
 
-    await check_method(schema.name)
+    await check_method(schema.name, schema.qwargs)
     new_object = models.Task(**schema.dict(), user_id=user.id)
     return await new_object.save(db_session)
+
+
+@router.post(
+    path='/{id}/abort',
+    response_model=schemas.TaskOut,
+    status_code=status.HTTP_201_CREATED)
+async def task_abort(
+    id: int,
+    user: models.User = Depends(get_active_user),
+    db_session: AsyncSession = Depends(db.get_database),
+) -> models.Task:
+    """Abort task with POST request"""
+
+    get_object = await models.Task.get(db_session, id=id)
+    await get_object.abort()
+    updated = schemas.TaskUpdate(**get_object.__dict__)
+    return await get_object.update(db_session, **updated.__dict__)
 
 
 @router.get(
@@ -115,7 +140,7 @@ async def task_patch(
 ) -> models.Task:
     """Modify task with PATCH request"""
 
-    await check_method(schema.name)
+    await check_method(schema.name, schema.qwargs)
     get_object = await models.Task.get(db_session, id=id)
     await get_object.update_planned_for(schema.delay_seconds)
     updated = schemas.TaskUpdate(**get_object.__dict__)

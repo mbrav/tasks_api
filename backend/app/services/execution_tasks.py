@@ -1,4 +1,5 @@
 
+from itertools import permutations
 from typing import List
 
 from pydantic import BaseModel, Field
@@ -14,42 +15,57 @@ class ExecutableTasks:
     """Tasks available for execution"""
 
     @staticmethod
-    def capital(text: str) -> str:
+    async def combine(text: str, text2: str) -> str:
+        """Combine two strings"""
+        return text+text2
+
+    @staticmethod
+    async def permutation(text: str) -> str:
+        """Find permutation of a string"""
+        return str(list(permutations(text)))
+
+    @staticmethod
+    async def repeat(text: str, index: int, times: int) -> str:
+        """Repeat character in string"""
+        return str(text[index]*times)
+
+    @staticmethod
+    async def capital(text: str) -> str:
         """Capitalize string"""
         return text.capitalize()
 
     @staticmethod
-    def capslock(text: str) -> str:
+    async def capslock(text: str) -> str:
         """Capslock string"""
         return text.upper()
 
     @staticmethod
-    def lower(text: str) -> str:
+    async def lower(text: str) -> str:
         """Convert the entire string to lowercase"""
         return text.casefold()
 
     @staticmethod
-    def check_decimal(text: str) -> str:
+    async def check_decimal(text: str) -> str:
         """Check if string is decimal"""
         return str(text.isdecimal())
 
     @staticmethod
-    def reverse(text: str) -> str:
+    async def reverse(text: str) -> str:
         """Reverse string"""
         return text[::-1]
 
     @staticmethod
-    def sort_alphabetically(text: str) -> str:
+    async def sort_alphabetically(text: str) -> str:
         """Sort letters in string alphabetically"""
         return ''.join(sorted(text))
 
     @staticmethod
-    def transliter(text: str) -> str:
+    async def transliter(text: str) -> str:
         """Translit roman to russian"""
         return translit(text, 'ru')
 
-    @staticmethod
-    def translit_reverse(text: str) -> str:
+    @ staticmethod
+    async def translit_reverse(text: str) -> str:
         """Translit russian to roman"""
         return translit(text, reversed=True)
 

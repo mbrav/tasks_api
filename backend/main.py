@@ -8,15 +8,15 @@ from app.config import settings
 from app.services import start_scheduler
 from app.utils import create_superuser
 
-FILE_DIR = os.path.dirname(os.path.abspath(__file__))
-REPO_DIR = os.path.dirname(FILE_DIR)
-with open(f'{REPO_DIR}/README.md') as f:
-    description = f.read()
+# FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+# REPO_DIR = os.path.dirname(FILE_DIR)
+# with open(f'{REPO_DIR}/README.md') as f:
+#     description = f.read()
 
 
 app = FastAPI(
     title='API service for tasks',
-    description=description,
+    # description=description,
     contact={
         'name': 'mbrav',
         'url': 'https://github.com/mbrav',
