@@ -13,6 +13,7 @@ from app.utils import create_superuser
 # with open(f'{REPO_DIR}/README.md') as f:
 #     description = f.read()
 
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title='API service for tasks',
